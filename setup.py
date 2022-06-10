@@ -10,7 +10,7 @@ setup(
     description="A module which allows easy implementation of button pagination",
     long_description=desc,
     long_description_content_type="text/markdown",
-    author="andrew",
+    author="antinuke0day",
     url="https://github.com/antinuke0day/button_paginator",
     license="Apache",
     classifiers=[
