@@ -5,7 +5,7 @@
 To install you need [git](https://git-scm.com/downloads) installed. After installing it, run
 
 ```shell
-pip install git+https://github.com/antinuke0day/button_paginatior
+pip install git+https://github.com/antinuke0day/button_paginatior.git
 ```
 
 ---
