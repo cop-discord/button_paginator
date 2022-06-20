@@ -123,7 +123,7 @@ class lock_page(discord.ui.Button):
         view.stop()
 
 class Paginator(discord.ui.View):
-    def __init__(self, bot, embeds, destination, /, *, interactionfailed=None, check=None, timeout=None):
+    def __init__(self, bot, embeds, destination, /, *, interactionfailed=None, check=None, timeout=None, invoker=None):
         """A class which controls everything that happens
 
         Parameters
@@ -148,6 +148,7 @@ class Paginator(discord.ui.View):
         self.page = 0
         self.destination = destination
         self.interactionfailed=interactionfailed
+        self.invoker=invoker
         self.page_button = None
 
     def default_pagination(self):
@@ -192,6 +193,12 @@ class Paginator(discord.ui.View):
             self.stop()
 
     async def interaction_check(self, interaction):
+        if self.invoker:
+            if interaction.user.id != self.invoker:
+                await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"<:warn:940732267406454845> <@!{self.invoker}>: **You aren't the author of this embed**", color=int("faa61a", 16)))
+                return await interaction.response.defer()
+            else:
+                return interaction.user.id == self.invoker
         if self.check is None:
             return True
         if not isfunc(self.check):
@@ -208,6 +215,8 @@ class Paginator(discord.ui.View):
             raise ValueError
 
     async def on_timeout(self):
+        view = self.view
+        view.clear_items()
         self.stop()
 
     def update_view(self):
