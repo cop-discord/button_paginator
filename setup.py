@@ -12,18 +12,6 @@ setup(
     long_description_content_type="text/markdown",
     author="antinuke0day",
     url="https://github.com/antinuke0day/button_paginator",
-    license="Apache",
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers",
-        "Topic :: Software Development :: Build Tools",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-    ],
     python_requires=">=3.6",
     packages=find_packages(include=["button_paginator", "button_paginator.*"]),
 )
