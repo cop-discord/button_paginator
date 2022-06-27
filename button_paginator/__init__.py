@@ -12,7 +12,7 @@ class prev_page(discord.ui.Button):
         if view.page < 0:
             view.page = len(view.embeds)-1
         view.update_view()
-        await interaction.response.defer()
+        #await interaction.response.defer()
         await view.edit_embed(interaction)
 
 class first_page(discord.ui.Button):
@@ -23,7 +23,7 @@ class first_page(discord.ui.Button):
         view = self.view
         view.page = 0
         view.update_view()
-        await interaction.response.defer()
+        #await interaction.response.defer()
         await view.edit_embed(interaction)
 
 class next_page(discord.ui.Button):
@@ -36,7 +36,7 @@ class next_page(discord.ui.Button):
         if view.page == len(view.embeds):
             view.page = 0
         view.update_view()
-        await interaction.response.defer()
+        #await interaction.response.defer()
         await view.edit_embed(interaction)
 
 class last_page(discord.ui.Button):
@@ -47,7 +47,7 @@ class last_page(discord.ui.Button):
         view = self.view
         view.page = len(view.embeds)-1
         view.update_view()
-        await interaction.response.defer()
+        #await interaction.response.defer()
         await view.edit_embed(interaction)
 
 class delete_page(discord.ui.Button):
@@ -57,7 +57,7 @@ class delete_page(discord.ui.Button):
     async def callback(self, interaction):
         view = self.view
         await view.message.delete()
-        await interaction.response.defer()
+        #await interaction.response.defer()
         view.stop()
         
 class end_page(discord.ui.Button):
@@ -69,7 +69,7 @@ class end_page(discord.ui.Button):
         for child in view.children:
             child.disabled = True
         await view.edit_embed(interaction)
-        await interaction.response.defer()
+        #await interaction.response.defer()
         view.stop()
 
 class show_page(discord.ui.Button):
@@ -119,7 +119,7 @@ class lock_page(discord.ui.Button):
         view = self.view
         view.clear_items()
         await view.edit_embed(interaction)
-        await interaction.response.defer()
+        #await interaction.response.defer()
         view.stop()
 
 class Paginator(discord.ui.View):
@@ -196,8 +196,8 @@ class Paginator(discord.ui.View):
         if self.invoker:
             if interaction.user.id != self.invoker:
                 await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"<:warn:940732267406454845> <@!{self.invoker}>: **You aren't the author of this embed**", color=int("faa61a", 16)))
-                return await interaction.response.defer()
             else:
+                await interaction.response.defer()
                 return interaction.user.id == self.invoker
         if self.check is None:
             return True
