@@ -17,7 +17,7 @@ import button_paginator as pg
 @bot.command()
 async def test(ctx):
 	embeds = pg.embed_creator("Very long text"*10000, 1995, prefix='```\n', suffix='\n```')
-	paginator = pg.Paginator(bot, embeds, ctx)
+	paginator = pg.Paginator(bot, embeds, ctx, invoker=ctx.author.id)
 	paginator.default_pagination()
 	await paginator.start()
 ```
@@ -29,7 +29,7 @@ import button_paginator as pg
 @bot.command()
 async def test(ctx):
 	embeds = pg.embed_creator("Very long text"*10000, 1995, prefix='```\n', suffix='\n```')
-	paginator = pg.Paginator(bot, embeds, ctx)
+	paginator = pg.Paginator(bot, embeds, ctx, invoker=ctx.author.id)
 	paginator.add_button('prev', emoji='◀')
 	paginator.add_button('delete', label='Close the paginator', emoji='⏹')
 	paginator.add_button('next', emoji='▶')
@@ -58,7 +58,7 @@ class some_button(discord.ui.Button):
 @bot.command()
 async def test(ctx):
 	embeds = pg.embed_creator("Very long text"*10000, 1995, prefix='```\n', suffix='\n```')
-	paginator = pg.Paginator(bot, embeds, ctx)
+	paginator = pg.Paginator(bot, embeds, ctx, invoker=ctx.author.id)
 	paginator.default_pagination()
 	paginator.add_item(some_button())
 	await paginator.start()
@@ -72,7 +72,7 @@ import button_paginator as pg
 async def test(ctx):
 	contents = ('Hello World!', discord.Embed(title='Hello World!'), ('Hello World!', discord.Embed(title="Hello World!")))
 	# Does not support attachments
-	paginator = pg.Paginator(bot, contents, ctx)
+	paginator = pg.Paginator(bot, contents, ctx, invoker=ctx.author.id)
 	paginator.default_pagination()
 	await paginator.start()
 ```
