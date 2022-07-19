@@ -220,10 +220,7 @@ class Paginator(discord.ui.View):
         self.stop()
 
     def update_view(self):
-        try:
-            self.page_button.label = str(self.page+1)
-        except (NameError,AttributeError):
-            pass
+        pass
 
     def add_button(self, action, /, *, label="", emoji=None, style=discord.ButtonStyle.grey, row=None):
         action = action.strip().lower()
