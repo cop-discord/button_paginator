@@ -193,7 +193,9 @@ class Paginator(discord.ui.View):
             self.stop()
 
     async def interaction_check(self, interaction):
-        if self.invoker:
+        if not self.invoker:
+            await interaction.response.defer()
+        else:
             if interaction.user.id != self.invoker:
                 await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"<:warn:940732267406454845> <@!{self.invoker}>: **You aren't the author of this embed**", color=int("faa61a", 16)))
             else:
@@ -220,7 +222,10 @@ class Paginator(discord.ui.View):
         self.stop()
 
     def update_view(self):
-        pass
+         try:
+             self.page_button.label = str(self.page+1)
+         except (NameError,AttributeError):
+             pass
 
     def add_button(self, action, /, *, label="", emoji=None, style=discord.ButtonStyle.grey, row=None):
         action = action.strip().lower()
