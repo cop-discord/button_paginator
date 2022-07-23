@@ -241,7 +241,7 @@ class Paginator(discord.ui.View):
             self.add_item(button)
             self.update_view()
         elif action == "goto":
-            button = goto_page("1", emoji, style, row)
+            button = goto_page(label, emoji, style, row)
             self.page_button = button
             self.add_item(button)
             self.update_view()
