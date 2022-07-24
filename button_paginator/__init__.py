@@ -125,7 +125,7 @@ class lock_page(discord.ui.Button):
         view.stop()
 
 class Paginator(discord.ui.View):
-    def __init__(self, bot, embeds, destination, /, *, interactionfailed=None, check=None, timeout=None, invoker=None):
+    def __init__(self, bot, embeds, destination, /, *, interactionfailed=None, check=None, timeout=None, invoker=None, defer=True):
         """A class which controls everything that happens
 
         Parameters
@@ -146,6 +146,7 @@ class Paginator(discord.ui.View):
         super().__init__(timeout=timeout)
         self.check = check
         self.bot = bot
+        self.defer = defer
         self.embeds = embeds
         self.page = 0
         self.destination = destination
@@ -231,6 +232,7 @@ class Paginator(discord.ui.View):
             pass
 
     def add_button(self, action, /, *, label="", emoji=None, style=discord.ButtonStyle.grey, row=None):
+        defer=self.defer
         action = action.strip().lower()
         if action not in ["first","prev","previous","back","delete","next","last","end","page","show","goto","lock"]:
             return
