@@ -7,6 +7,7 @@ class prev_page(discord.ui.Button):
         super().__init__(label=label, emoji=emoji, style=style, row=row)
 
     async def callback(self, interaction):
+        await interaction.response.defer()
         view = self.view
         view.page -= 1
         if view.page < 0:
@@ -20,6 +21,7 @@ class first_page(discord.ui.Button):
         super().__init__(label=label, emoji=emoji, style=style, row=row)
 
     async def callback(self, interaction):
+        await interaction.response.defer()
         view = self.view
         view.page = 0
         view.update_view()
@@ -31,6 +33,7 @@ class next_page(discord.ui.Button):
         super().__init__(label=label, emoji=emoji, style=style, row=row)
 
     async def callback(self, interaction):
+        await interaction.response.defer()
         view = self.view
         view.page += 1
         if view.page == len(view.embeds):
@@ -44,6 +47,7 @@ class last_page(discord.ui.Button):
         super().__init__(label=label, emoji=emoji, style=style, row=row)
 
     async def callback(self, interaction):
+        await interaction.response.defer()
         view = self.view
         view.page = len(view.embeds)-1
         view.update_view()
@@ -69,7 +73,6 @@ class end_page(discord.ui.Button):
         for child in view.children:
             child.disabled = True
         await view.edit_embed(interaction)
-        #await interaction.response.defer()
         view.stop()
 
 class show_page(discord.ui.Button):
@@ -119,7 +122,6 @@ class lock_page(discord.ui.Button):
         view = self.view
         view.clear_items()
         await view.edit_embed(interaction)
-        #await interaction.response.defer()
         view.stop()
 
 class Paginator(discord.ui.View):
@@ -194,12 +196,13 @@ class Paginator(discord.ui.View):
 
     async def interaction_check(self, interaction):
         if not self.invoker:
-            await interaction.response.defer()
+            pass
         else:
             if interaction.user.id != self.invoker:
-                await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"<:warn:940732267406454845> <@!{self.invoker}>: **You aren't the author of this embed**", color=int("faa61a", 16)))
+                return await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"<:warn:940732267406454845> <@!{self.invoker}>: **You aren't the author of this embed**", color=int("faa61a", 16)))
             else:
-                await interaction.response.defer()
+                #await interaction.response.defer()
+                pass
                 return interaction.user.id == self.invoker
         if self.check is None:
             return True
@@ -222,10 +225,10 @@ class Paginator(discord.ui.View):
         self.stop()
 
     def update_view(self):
-         try:
-             self.page_button.label = str(self.page+1)
-         except (NameError,AttributeError):
-             pass
+        try:
+            self.page_button.label = None #str(self.page+1)
+        except (NameError,AttributeError):
+            pass
 
     def add_button(self, action, /, *, label="", emoji=None, style=discord.ButtonStyle.grey, row=None):
         action = action.strip().lower()
@@ -241,8 +244,8 @@ class Paginator(discord.ui.View):
             self.add_item(button)
             self.update_view()
         elif action == "goto":
-            button = goto_page(label, emoji, style, row)
-            #self.page_button = button
+            button = goto_page(None, emoji, style, row)
+            self.page_button = button
             self.add_item(button)
             self.update_view()
         elif action == "next":
