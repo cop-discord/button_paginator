@@ -125,7 +125,7 @@ class lock_page(discord.ui.Button):
         view.stop()
 
 class Paginator(discord.ui.View):
-    def __init__(self, bot, embeds, destination, /, *, interactionfailed=None, check=None, timeout=None, invoker=None, defer=True):
+    def __init__(self, bot, embeds, destination, /, *, invoker=None):
         """A class which controls everything that happens
 
         Parameters
@@ -143,6 +143,10 @@ class Paginator(discord.ui.View):
         timeout: Optional[:class:`float`]
             The number of seconds to wait before timing out.
         """
+        timeout=None
+        interactionfailed=None
+        check=None
+        defer=True
         super().__init__(timeout=timeout)
         self.check = check
         self.bot = bot
