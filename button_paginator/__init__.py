@@ -142,11 +142,11 @@ class Paginator(discord.ui.View):
         timeout: Optional[:class:`float`]
             The number of seconds to wait before timing out.
         """
-        timeout=None
+        super().__init__(timeout=None)
+        self.timeout=None
         interactionfailed=None
         check=None
         defer=True
-        super().__init__(timeout=timeout)
         self.check = check
         self.bot = bot
         self.defer = defer
@@ -198,7 +198,7 @@ class Paginator(discord.ui.View):
         except discord.HTTPException:
             self.stop()
 
-    async def interaction_check(self, interaction:discord.Interaction):
+    async def interaction_check(self, interaction:discord.Interaction) -> bool:
         if not self.invoker:
             pass
         else:
