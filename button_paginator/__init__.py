@@ -127,7 +127,6 @@ class lock_page(discord.ui.Button):
 class Paginator(discord.ui.View):
     def __init__(self, bot, embeds, destination, /, *, invoker=None):
         """A class which controls everything that happens
-
         Parameters
         -----------
         bot: :class:`Bot`
@@ -166,7 +165,7 @@ class Paginator(discord.ui.View):
         self.add_button("last", label='last')
         self.add_button("delete", label='Close paginator')
         
-    async def edit_embed(self, interaction):
+    async def edit_embed(self, interaction:discord.Interaction):
         current = self.embeds[self.page]
         if isinstance(current, str):
             await interaction.message.edit(content=current, embed=None, view=self)
@@ -199,12 +198,12 @@ class Paginator(discord.ui.View):
         except discord.HTTPException:
             self.stop()
 
-    async def interaction_check(self, interaction):
+    async def interaction_check(self, interaction:discord.Interaction):
         if not self.invoker:
             pass
         else:
             if interaction.user.id != self.invoker:
-                return await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"⚠{interaction.user.mention}: **You aren't the author of this embed**", color=int("faa61a", 16)))
+                return await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"⚠ {interaction.user.mention}: **You aren't the author of this embed**", color=int("faa61a", 16)))
             else:
                 #await interaction.response.defer()
                 pass
