@@ -103,6 +103,10 @@ class goto_modal(discord.ui.Modal, title="Go to"):
 
             view.update_view()
             await view.edit_embed(interaction)
+            try:
+                await interaction.defer()
+            except:
+                pass
         except ValueError:
             return await interaction.response.send_message(content="That's not a number", ephemeral=True)
 
