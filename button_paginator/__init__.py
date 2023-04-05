@@ -129,7 +129,7 @@ class lock_page(discord.ui.Button):
         view.stop()
 
 class Paginator(discord.ui.View):
-    def __init__(self, bot, embeds, destination, /, *, invoker=None):
+    def __init__(self, bot, embeds, destination, /, *, invoker=None, attachments=None):
         """A class which controls everything that happens
         Parameters
         -----------
@@ -153,6 +153,7 @@ class Paginator(discord.ui.View):
         defer=True
         self.check = check
         self.bot = bot
+        self.attachments = attachments
         self.defer = defer
         self.embeds = embeds
         self.page = 0
@@ -169,12 +170,16 @@ class Paginator(discord.ui.View):
         self.add_button("last", label='last')
         self.add_button("delete", label='Close paginator')
         
-    async def edit_embed(self, interaction:discord.Interaction):
+    async def edit_embed(self, interaction):
         current = self.embeds[self.page]
+        if self.attachments:
+            current_attachment = self.attachments[self.page]
+        else:
+            current_attachment = None
         if isinstance(current, str):
-            await interaction.message.edit(content=current, embed=None, view=self)
+            await interaction.message.edit(content=current, embed=None, view=self, attachments=current_attachment)
         elif isinstance(current, discord.Embed):
-            await interaction.message.edit(content=None, embed=current, view=self)
+            await interaction.message.edit(content=None, embed=current, view=self, attachments=current_attachment)
         elif isinstance(current, tuple):
             dct = {}
             for item in current:
@@ -182,15 +187,19 @@ class Paginator(discord.ui.View):
                     dct["content"] = item
                 elif isinstance(item, discord.Embed):
                     dct["embed"] = item
-            await interaction.message.edit(content = dct.get("content", None), embed = dct.get("embed", None), view=self)
+            await interaction.message.edit(content = dct.get("content", None), embed = dct.get("embed", None), view=self, attachments=current_attachment)
 
     async def start(self):
         try:
             current = self.embeds[self.page]
+            if self.attachments:
+                current_attachment = self.attachments[self.page]
+            else:
+                current_attachment = None
             if isinstance(current, str):
-                self.message = await self.destination.send(content=current,embed=None, view=self)
+                self.message = await self.destination.send(content=current,embed=None, view=self, file=current_attachment)
             elif isinstance(current, discord.Embed):
-                self.message = await self.destination.send(content=None, embed=current, view=self)
+                self.message = await self.destination.send(content=None, embed=current, view=self, file=current_attachment)
             elif isinstance(current, tuple):
                 dct = {}
                 for item in current:
@@ -198,7 +207,7 @@ class Paginator(discord.ui.View):
                         dct["content"] = item
                     elif isinstance(item, discord.Embed):
                         dct["embed"] = item
-                self.message = await self.destination.send(content = dct.get("content", None), embed = dct.get("embed", None), view=self)
+                self.message = await self.destination.send(content = dct.get("content", None), embed = dct.get("embed", None), view=self, file=current_attachment)
         except discord.HTTPException:
             self.stop()
 
