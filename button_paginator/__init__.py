@@ -174,32 +174,10 @@ class Paginator(discord.ui.View):
         current = self.embeds[self.page]
         if self.attachments:
             current_attachment = self.attachments[self.page]
-        else:
-            current_attachment = None
-        if isinstance(current, str):
-            await interaction.message.edit(content=current, embed=None, view=self, attachments=current_attachment)
-        elif isinstance(current, discord.Embed):
-            await interaction.message.edit(content=None, embed=current, view=self, attachments=current_attachment)
-        elif isinstance(current, tuple):
-            dct = {}
-            for item in current:
-                if isinstance(item, str):
-                    dct["content"] = item
-                elif isinstance(item, discord.Embed):
-                    dct["embed"] = item
-            await interaction.message.edit(content = dct.get("content", None), embed = dct.get("embed", None), view=self, attachments=current_attachment)
-
-    async def start(self):
-        try:
-            current = self.embeds[self.page]
-            if self.attachments:
-                current_attachment = self.attachments[self.page]
-            else:
-                current_attachment = None
             if isinstance(current, str):
-                self.message = await self.destination.send(content=current,embed=None, view=self, file=current_attachment)
+                await interaction.message.edit(content=current, embed=None, view=self, attachments=current_attachment)
             elif isinstance(current, discord.Embed):
-                self.message = await self.destination.send(content=None, embed=current, view=self, file=current_attachment)
+                await interaction.message.edit(content=None, embed=current, view=self, attachments=current_attachment)
             elif isinstance(current, tuple):
                 dct = {}
                 for item in current:
@@ -207,11 +185,58 @@ class Paginator(discord.ui.View):
                         dct["content"] = item
                     elif isinstance(item, discord.Embed):
                         dct["embed"] = item
-                self.message = await self.destination.send(content = dct.get("content", None), embed = dct.get("embed", None), view=self, file=current_attachment)
+                await interaction.message.edit(content = dct.get("content", None), embed = dct.get("embed", None), view=self, attachments=current_attachment)
+        else:
+            if isinstance(current, str):
+                await interaction.message.edit(content=current, embed=None, view=self)
+            elif isinstance(current, discord.Embed):
+                await interaction.message.edit(content=None, embed=current, view=self)
+            elif isinstance(current, tuple):
+                dct = {}
+                for item in current:
+                    if isinstance(item, str):
+                        dct["content"] = item
+                    elif isinstance(item, discord.Embed):
+                        dct["embed"] = item
+                await interaction.message.edit(content = dct.get("content", None), embed = dct.get("embed", None), view=self)
+
+
+    async def start(self):
+        try:
+            current = self.embeds[self.page]
+            if self.attachments:
+                current_attachment = self.attachments[self.page]
+                if isinstance(current, str):
+                    self.message = await self.destination.send(content=current,embed=None, view=self, file=current_attachment)
+                elif isinstance(current, discord.Embed):
+                    self.message = await self.destination.send(content=None, embed=current, view=self, file=current_attachment)
+                elif isinstance(current, tuple):
+                    dct = {}
+                    for item in current:
+                        if isinstance(item, str):
+                            dct["content"] = item
+                        elif isinstance(item, discord.Embed):
+                            dct["embed"] = item
+                    self.message = await self.destination.send(content = dct.get("content", None), embed = dct.get("embed", None), view=self, file=current_attachment)
+            else:
+                if isinstance(current, str):
+                    self.message = await self.destination.send(content=current,embed=None, view=self)
+                elif isinstance(current, discord.Embed):
+                    self.message = await self.destination.send(content=None, embed=current, view=self)
+                elif isinstance(current, tuple):
+                    dct = {}
+                    for item in current:
+                        if isinstance(item, str):
+                            dct["content"] = item
+                        elif isinstance(item, discord.Embed):
+                            dct["embed"] = item
+                    self.message = await self.destination.send(content = dct.get("content", None), embed = dct.get("embed", None), view=self, file=current_attachment)
+        
         except discord.HTTPException:
             self.stop()
 
     async def interaction_check(self, interaction:discord.Interaction) -> bool:
+        emoji="<:warning~1:1054569362645860402>"
         if not self.invoker:
             pass
         else:
