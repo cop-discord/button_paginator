@@ -173,7 +173,7 @@ class Paginator(discord.ui.View):
     async def edit_embed(self, interaction):
         current = self.embeds[self.page]
         if self.attachments:
-            current_attachment = self.attachments[self.page]
+            current_attachment = [self.attachments[self.page]]
             if isinstance(current, str):
                 await interaction.message.edit(content=current, embed=None, view=self, attachments=current_attachment)
             elif isinstance(current, discord.Embed):
