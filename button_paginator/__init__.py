@@ -236,12 +236,12 @@ class Paginator(discord.ui.View):
             self.stop()
 
     async def interaction_check(self, interaction:discord.Interaction) -> bool:
-        emoji="<:warning~1:1054569362645860402>"
+        emoji="<:warning:1054569362645860402>"
         if not self.invoker:
             pass
         else:
             if interaction.user.id != self.invoker:
-                return await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"⚠ {interaction.user.mention}: **You aren't the author of this embed**", color=int("faa61a", 16)))
+                return await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"{emoji} {interaction.user.mention}: **You aren't the author of this embed**", color=int("d6bcd0", 16)))
             else:
                 #await interaction.response.defer()
                 pass
