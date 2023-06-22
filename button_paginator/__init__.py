@@ -152,7 +152,7 @@ class Paginator(discord.ui.View):
         check=None
         defer=True
         if emoji == None: self.emoji="⚠️"
-        else: self.emoji=emoji
+        else: self.emoji=error_emoji
         if error_color == None: self.color=int("d6bcd0", 16)
         else: self.color=int(error_color, 16)
         self.check = check
