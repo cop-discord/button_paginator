@@ -129,7 +129,7 @@ class lock_page(discord.ui.Button):
         view.stop()
 
 class Paginator(discord.ui.View):
-    def __init__(self, bot, embeds, destination, /, *, invoker=None, attachments=None):
+    def __init__(self, bot, embeds, destination, /, *, invoker=None, attachments=None,error_emoji=None,error_color=None):
         """A class which controls everything that happens
         Parameters
         -----------
@@ -151,6 +151,10 @@ class Paginator(discord.ui.View):
         interactionfailed=None
         check=None
         defer=True
+        if emoji == None: self.emoji="⚠️"
+        else: self.emoji=emoji
+        if error_color == None: self.color=int("d6bcd0", 16)
+        else: self.color=int(error_color, 16)
         self.check = check
         self.bot = bot
         self.attachments = attachments
@@ -236,12 +240,12 @@ class Paginator(discord.ui.View):
             self.stop()
 
     async def interaction_check(self, interaction:discord.Interaction) -> bool:
-        emoji="<:warning:1054569362645860402>"
+        emoji=self.emoji
         if not self.invoker:
             pass
         else:
             if interaction.user.id != self.invoker:
-                return await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"{emoji} {interaction.user.mention}: **You aren't the author of this embed**", color=int("d6bcd0", 16)))
+                return await interaction.response.send_message(ephemeral=True, embed=discord.Embed(description=f"{emoji} {interaction.user.mention}: **You aren't the author of this embed**", color=self.color))
             else:
                 #await interaction.response.defer()
                 pass
